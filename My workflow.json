@@ -1,0 +1,617 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -192,
+        -48
+      ],
+      "id": "9fa5e038-75de-4172-b72d-ef0ead906a2f",
+      "name": "When chat message received",
+      "webhookId": "ac0755ac-9c83-4b49-81fd-f239259d8068"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        16,
+        -48
+      ],
+      "id": "b71203e4-37e9-40eb-8bab-c31514f83426",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        32,
+        160
+      ],
+      "id": "d20c4d46-0fdf-43b7-9f12-f10a9351784a",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Get a record in Airtable or search a record in airtable",
+        "authentication": "airtableOAuth2Api",
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appHdfDTLLwfZzB9f",
+          "mode": "list",
+          "cachedResultName": "Book Inventory Manager",
+          "cachedResultUrl": "https://airtable.com/appHdfDTLLwfZzB9f"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl0eineaLIuoTwr9",
+          "mode": "list",
+          "cachedResultName": "Books",
+          "cachedResultUrl": "https://airtable.com/appHdfDTLLwfZzB9f/tbl0eineaLIuoTwr9"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtableTool",
+      "typeVersion": 2.2,
+      "position": [
+        176,
+        160
+      ],
+      "id": "68570de1-2e74-4050-9646-4c0d15fc29ea",
+      "name": "Search records in Airtable",
+      "credentials": {
+        "airtableOAuth2Api": {
+          "id": "9b7NtOosBkmHNoUQ",
+          "name": "Airtable OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "find a record and update in the airtable",
+        "authentication": "airtableOAuth2Api",
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appHdfDTLLwfZzB9f",
+          "mode": "list",
+          "cachedResultName": "Book Inventory Manager",
+          "cachedResultUrl": "https://airtable.com/appHdfDTLLwfZzB9f"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl0eineaLIuoTwr9",
+          "mode": "list",
+          "cachedResultName": "Books",
+          "cachedResultUrl": "https://airtable.com/appHdfDTLLwfZzB9f/tbl0eineaLIuoTwr9"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{$fromAI(\"recordID\",\"find the id of exact item and update it if need\") }}",
+            "Current Stock Quantity": "={{$fromAI(\"newQuantity\",\"update the new quantity in airtable\",\"number\") }}",
+            "Min Quantity": "={{$fromAI(\"minQuantity\",\"update the min quantity in airtable\",\"number\") }}",
+            "Reorder Point": "={{$fromAI(\"reorderPoint\",\"calculate reorder point as min quantity * 1.2 if not provided\",\"number\")}}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Title",
+              "displayName": "Title",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Author",
+              "displayName": "Author",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "ISBN",
+              "displayName": "ISBN",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Genre",
+              "displayName": "Genre",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Price",
+              "displayName": "Price",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Cost",
+              "displayName": "Cost",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Current Stock Quantity",
+              "displayName": "Current Stock Quantity",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Reorder Point",
+              "displayName": "Reorder Point",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Barcode",
+              "displayName": "Barcode",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Suppliers",
+              "displayName": "Suppliers",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Cover Image",
+              "displayName": "Cover Image",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Transactions",
+              "displayName": "Transactions",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Min Quantity",
+              "displayName": "Min Quantity",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtableTool",
+      "typeVersion": 2.2,
+      "position": [
+        336,
+        160
+      ],
+      "id": "925e9edd-6ff3-4986-a281-e8d824b4fc25",
+      "name": "Update record in Airtable",
+      "credentials": {
+        "airtableOAuth2Api": {
+          "id": "9b7NtOosBkmHNoUQ",
+          "name": "Airtable OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -128,
+        160
+      ],
+      "id": "6047da68-6c65-4fe1-ae1d-d6eebc766b6d",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "wxbek0P58THVabsY",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 1
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        1072,
+        32
+      ],
+      "id": "0c4e9284-b60b-485d-aee9-c6cc3213339b",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "url": "https://lms.uog.edu.pk/",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1280,
+        32
+      ],
+      "id": "114cf041-d247-44a3-9dbf-12316de216c3",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b6434208-02cb-414d-bd23-d397b6ad4d9c",
+              "leftValue": "={{ $json[\"statusCode\"].toString() }}",
+              "rightValue": "200",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "0e502259-7bf4-4254-a7c9-b0f90e14b844",
+              "leftValue": "={{ $json[\"statusCode\"].toString() }}",
+              "rightValue": "200",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1488,
+        32
+      ],
+      "id": "d8999e4c-2edf-433c-a847-604748c8ab49",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "73589138-29cc-4107-b151-ca873d529a5c",
+              "name": "status",
+              "value": "website up",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1696,
+        -48
+      ],
+      "id": "51fe1720-0ad4-4152-a311-b06a1dcb47ba",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "43d379fa-dc85-4a98-997a-03dbc3329d30",
+              "name": "status",
+              "value": "website down",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1696,
+        128
+      ],
+      "id": "a4c7a603-cc55-41c3-a36c-eabc66d612da",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "sendTo": "missimtiazimtiazahmed@gmail.com",
+        "subject": "Website status",
+        "emailType": "text",
+        "message": "={% if $json[\"statusCode\"] == 200 %}Website is UP{% else %}Website is DOWN{% endif %}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1920,
+        -32
+      ],
+      "id": "1baf3e6c-0e54-4a79-8b27-86d0946e8873",
+      "name": "Send a message",
+      "webhookId": "a1072b69-0c76-48f8-aec5-090aec4f3a79",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "XBrmG9vNycTUi9B0",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "missimtiazimtiazahmed@gmail.com",
+        "subject": "Website status",
+        "emailType": "text",
+        "message": "={% if $json[\"statusCode\"] == 200 %}Website is UP{% else %}Website is DOWN{% endif %}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1888,
+        128
+      ],
+      "id": "62efcae5-ab34-4193-946b-a5f548a3afc6",
+      "name": "Send a message1",
+      "webhookId": "a1072b69-0c76-48f8-aec5-090aec4f3a79",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "pizPAvyg4tqxSwxe",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records in Airtable": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update record in Airtable": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "0d5dcf1b-2624-464a-930a-3d0c37c1b267",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6acb9808d075608fbdc2d5b2f05eec5488ef23b2b9d94fc7d6563e5af315d549"
+  },
+  "nodeGroups": [],
+  "id": "RBz8IrAoA7HhE2rd",
+  "tags": []
+}
